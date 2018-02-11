@@ -30,7 +30,7 @@ def get_mfcc(audioFile, sampleRate=16000, n_mfcc=13):
 
 
 
-def audio_spectogram(audioFile, sampleRate=16000,):
+def audio_spectogram(audioFile, sampleRate=16000, complexity='magnitude'):
 	audio, rate = librosa.load(audioFile)
 	
 	# resample to a set rate
@@ -40,10 +40,21 @@ def audio_spectogram(audioFile, sampleRate=16000,):
 	audio_spec = librosa.core.fmt(audio)
 
 	# return audio spectrogam that as a matrix
-	return audio_spec
+
+	if complexity == 'magnitude':
+		magnitude, phase = librosa.core.magphase(audio_spec)
+		return magnitude
+	else if complexity == 'phase':
+		magnitude, phase = librosa.core.magphase(audio_spec)
+		return phase
+	else if complexity =='complex':
+		return audio_spec
+	else:
+		print("???. not sure what format you want from audio_spectrogram()")
 
 
-def short_fft(audioFile, sampleRate=16000, window=2048, numFrames=10):
+def short_fft(audioFile, sampleRate=16000, window=2048, numFrames=10,
+				complexity='magnitude'):
 	audio, rate = librosa.load(audioFile)
 	
 	# resample to a set rate
@@ -53,7 +64,16 @@ def short_fft(audioFile, sampleRate=16000, window=2048, numFrames=10):
 									n_fft=window,
 									hop_length=numFrames)
 
-	return fft_transform
+	if complexity=='magnitude': # if we only want the signal magnitude
+		magnitude, phase = librosa.core.magphase(fft_transform)
+		return magnitude
+	else if complexity=='phase': # if we only want the phase
+		magnitude, phase = librosa.core.magphase(fft_transform)
+		return phase
+	else if complexity=='complex': # if we want the real and imaginary parts
+		return fft_transform
+	else:
+		print("WOOPS, not sure what short_fft return format you want")
 	# return the short time fourier transform of the audiofile 
 
 
