@@ -8,16 +8,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-
-
 def get_mfcc(audioFile, sampleRate=16000, n_mfcc=13):
 	audio, rate = librosa.load(audioFile)
 	
 	# resample to a set rate
-	audio = librosa.core.resample(audioData, rate, sampleRate)
+	audio = librosa.core.resample(audio, rate, sampleRate)
 
 	# Let's make and display a mel-scaled power (energy-squared) spectrogram
-	S = librosa.feature.melspectrogram(y, sr=sr, n_mels=128)
+	S = librosa.feature.melspectrogram(audio, sr=sampleRate, n_mels=128)
 
 	# Convert to log scale (dB). We'll use the peak power (max) as reference.
 	log_S = librosa.power_to_db(S, ref=np.max)
@@ -36,32 +34,26 @@ def audio_spectogram(audioFile, sampleRate=16000,):
 	audio, rate = librosa.load(audioFile)
 	
 	# resample to a set rate
-	audio = librosa.core.resample(audioData, rate, sampleRate)
+	audio = librosa.core.resample(audio, rate, sampleRate)
 
-
+	# fast mellin transform, double sided laplace transform
+	audio_spec = librosa.core.fmt(audio)
 
 	# return audio spectrogam that as a matrix
-	return 
+	return audio_spec
 
 
-def two_D_spectrogram(audioFile, sampleRate=16000,):
+def short_fft(audioFile, sampleRate=16000, window=2048, numFrames=10):
 	audio, rate = librosa.load(audioFile)
 	
 	# resample to a set rate
-	audio = librosa.core.resample(audioData, rate, sampleRate)
+	audio = librosa.core.resample(audio, rate, sampleRate)
 
+	fft_transform = librosa.core.stft(audio, 
+									n_fft=window,
+									hop_length=numFrames)
 
-	# return static 2d spectrogram
-
-
-def short_fft(audioFile, sampleRate=16000,):
-	audio, rate = librosa.load(audioFile)
-	
-	# resample to a set rate
-	audio = librosa.core.resample(audioData, rate, sampleRate)
-
-
-
+	return fft_transform
 	# return the short time fourier transform of the audiofile 
 
 
@@ -73,9 +65,9 @@ def short_fft(audioFile, sampleRate=16000,):
 #######################################################
 def main():
 	audioFiles = os.listdir("sounds")
-
+	'''
 	audio = {}
-	for file in audioFiles[:3]: # just do the first few for now
+	for file in audioFiles[:2]: # just do the first few for now
 		try:
 			audio[file] = librosa.load("sounds/"+file)
 		except:
@@ -89,20 +81,43 @@ def main():
 	for file in audio.values():
 		if (file[1] != sampleRate):
 			file = librosa.core.resample(file[0], file[1], sampleRate)
+	'''
+
+	audioFile = "sounds/"+audioFiles[0]
+	print('---------------------')
+
+	mfcc = get_mfcc(audioFile, sampleRate=16000, n_mfcc=13)
+	print(mfcc.shape)
+	print('---------------------')
+
+	audioSpec = audio_spectogram(audioFile, sampleRate=16000)
+	# return audio spectrogam that as a matrix
+	print(audioSpec.shape)
+	print('---------------------')
 
 
-	# take the short fourier transform 
-	windowSize = 4
+	fft = short_fft(audioFile, sampleRate=16000, window=2048, numFrames=10)
+	# return the short time fourier transform of the audiofile 
+	print(fft.shape)
+	print('---------------------')
+
+	# TO-DO: separate the real and imaginary parts of the spectra
+	# convert this to magnitude and phase
 
 
-	# plot some stuff for visual checking
-	for file in audio.values():
-		print(file[0].shape)
-		print("sample rate %d" %file[1])
-		plt.figure()
-		plt.plot(file[0])
+	# TO-DO: break up these spectra into training samples
+
+
+	plt.figure()
+	plt.plot(mfcc)
+
+	plt.figure()
+	plt.plot(audioSpec)
+
+	plt.figure()
+	plt.plot(fft)
+
 	plt.show()
-
 
 
 if __name__ == '__main__':
