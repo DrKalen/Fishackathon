@@ -44,10 +44,10 @@ def audio_spectogram(audioFile, sampleRate=16000, complexity='magnitude'):
 	if complexity == 'magnitude':
 		magnitude, phase = librosa.core.magphase(audio_spec)
 		return magnitude
-	else if complexity == 'phase':
+	elif complexity == 'phase':
 		magnitude, phase = librosa.core.magphase(audio_spec)
 		return phase
-	else if complexity =='complex':
+	elif complexity =='complex':
 		return audio_spec
 	else:
 		print("???. not sure what format you want from audio_spectrogram()")
@@ -67,10 +67,10 @@ def short_fft(audioFile, sampleRate=16000, window=2048, numFrames=10,
 	if complexity=='magnitude': # if we only want the signal magnitude
 		magnitude, phase = librosa.core.magphase(fft_transform)
 		return magnitude
-	else if complexity=='phase': # if we only want the phase
+	elif complexity=='phase': # if we only want the phase
 		magnitude, phase = librosa.core.magphase(fft_transform)
 		return phase
-	else if complexity=='complex': # if we want the real and imaginary parts
+	elif complexity=='complex': # if we want the real and imaginary parts
 		return fft_transform
 	else:
 		print("WOOPS, not sure what short_fft return format you want")
@@ -121,21 +121,18 @@ def main():
 	print(fft.shape)
 	print('---------------------')
 
-	# TO-DO: separate the real and imaginary parts of the spectra
-	# convert this to magnitude and phase
-
 
 	# TO-DO: break up these spectra into training samples
 
 
 	plt.figure()
-	plt.plot(mfcc)
+	plt.plot(mfcc.T)
 
 	plt.figure()
 	plt.plot(audioSpec)
 
-	plt.figure()
-	plt.plot(fft)
+	#plt.figure()
+	#plt.plot(fft)
 
 	plt.show()
 
