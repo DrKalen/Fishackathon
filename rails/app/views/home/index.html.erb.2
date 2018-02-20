@@ -1,0 +1,80 @@
+<style type="text/css" media="screen">
+     div, body {
+        font-family: "Lucida Grande", "Bitstream Vera Sans", "Verdana";
+     }
+
+      body {
+        text-align:center;
+        margin: 0;
+        margin-bottom: 25px;
+        padding: 0;
+        background-color: #ffffff;
+        font-size: 13px;
+        color: #333;
+      }
+
+    .vcenter {
+       display: inline;
+       top: 50%; 
+       transform: translateY(-50%);
+       -webkit-transform: translateY(-50%);
+    }
+
+      h1 {
+        font-size: 28px;
+        color: #333;
+      }
+
+</style>
+<div style="height: 100px; align: center">
+  <%= image_tag("StoPoaching.jpg", size: '100x90') %>
+  <div class="vcenter" style="font-size: 36px; color: #030303;">Poach Stopper</div>
+  <%= image_tag("StoPoaching.jpg", size: '100x90') %>
+</div>
+
+<div id="map" style="margin:0 auto;width:800px;height:800px;background:yellow">
+
+</div>
+
+<script>
+    
+  function initMap() {
+  var locations = <%=raw @locations.to_json %>;
+  
+  var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 6,
+      center: {lat: 40.8, lng: -68.5}
+    });
+
+  locations.map(function(loc) {
+
+  var markerInfo = {
+        position: {lat: loc['latitude'], lng: loc['longitude']},
+        title: loc['title'],
+        map: map};
+  if (loc['status'] != 'OK') {
+    markerInfo['animation'] = google.maps.Animation.BOUNCE;
+  }
+  
+  var marker = new google.maps.Marker(marketInfo);
+  });
+  }
+  
+  function toggleBounce() {
+  if (this.getAnimation() !== null) {
+  this.setAnimation(null);
+  } else {
+  this.setAnimation(google.maps.Animation.BOUNCE);
+  }
+  }
+</script>
+<script async defer
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKT9_DACKx2g8Kbxqe6C9Tpzy5PyrogWU&callback=initMap">
+</script>
+
+</body>
+
+
+<hr>
+<p>This file is located in <%= Rails.root.to_s %>/app/views/home/index.html.erb</p>
+

@@ -1,0 +1,29 @@
+<%= javascript_include_tag 'application' %>
+
+<h1>Edit Location</h1>
+
+<%= form_for :location, url: location_path(@location), method: :patch do |f|  %>
+<p>
+  Title: <%= f.text_field :title %>
+</p>
+
+<p>
+  Latitude: <%= f.text_field :latitude %><br>
+  Longitude <%= f.text_field :longitude %>
+</p>
+
+<p>
+  Description<br><%= f.text_area :description, size: "60x10"  %>
+</p>
+
+<p>
+  Status: <%= f.text_field :status %>
+</p>
+
+<p>
+  <%= submit_tag "Change Location" %>
+</p>
+<% end %>
+
+<%= link_to 'Really Delete This Location', location_path(@location), data: { confirm: 'Are you sure?' }, method: :delete %>
+

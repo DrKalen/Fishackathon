@@ -1,0 +1,24 @@
+<h1>Enter a New Location</h1>
+
+<%= form_for :location, url: locations_path(@location) do |f|  %>
+<p>
+  Title: <%= f.text_field :title %>
+</p>
+
+<p>
+  Latitude: <%= f.text_field :latitude %><br>
+  Longitude <%= f.text_field :longitude %>
+</p>
+
+<p>
+  Description<br><%= f.text_area :description, size: "60x10"  %>
+</p>
+
+<p>
+  Status: <%= f.text_field :status %>
+</p>
+
+<p>
+  <%= submit_tag "Add Location" %>
+</p>
+<% end %>

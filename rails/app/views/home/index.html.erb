@@ -1,0 +1,112 @@
+  <style type="text/css" media="screen">
+       div, body {
+          font-family: "Lucida Grande", "Bitstream Vera Sans", "Verdana";
+       }
+
+        body {
+          text-align:center;
+          margin: 0;
+          padding: 0;
+          background-color: #ffffff;
+          font-size: 13px;
+          color: #333;
+        }
+
+      .vcenter {
+         display: inline;
+         top: 50%;
+         transform: translateY(-50%);
+         -webkit-transform: translateY(-50%);
+      }
+
+        h1 {
+          font-size: 28px;
+          color: #333;
+        }
+
+  </style>
+
+  <div id="map" style="margin:0 auto;width:800px;height:800px;background:yellow"></div>
+
+  <div style="position: absolute; left: 0; bottom: 0; z-index: 9999; width: 100%">
+    <div style="margin: 0 auto; text-align: center;">
+      <p><%= image_tag("stopoaching_burned.png", size: '100x90') %></p>
+      <div class="vcenter" style="font-size: 36px; color: #e1e1e1;">Poach Stopper</div>
+    </div>
+  </div>
+
+<script>
+
+  window.locations = <%=raw @locations.to_json %>;
+  if(window.locations.length < 2) {
+    console.log("refreshing");
+
+    setTimeout(function() {
+      window.location.reload();
+    }, 5000);
+  }
+
+  function initMap() {
+    var height = window.innerHeight;
+    var width = document.body.clientWidth;
+    var mapDiv = document.getElementById("map")
+
+    mapDiv.style.width = width + "px"
+    mapDiv.style.height = height + "px"
+
+    var map = new google.maps.Map(mapDiv, {
+      zoom: 8,
+      center: {lat: 41.3, lng: -68.5},
+      mapTypeId: 'satellite'
+    });
+
+    var georgesLayer = new google.maps.KmlLayer({
+      url: 'http://poachstopper.net/georges2.kml',
+      preserveViewport: true,
+      suppressInfoWindows: true,
+      pane: "floatPane"
+    });
+    georgesLayer.setMap(map);
+
+    locations.map(function(loc) {
+      var anima = null;
+      var icon = null;
+      var image2 = 'http://poachstopper.net/images/danger-icon-tiny.png';
+
+      if (loc['status'] !== 'OK') {
+        anima = google.maps.Animation.BOUNCE;
+        icon = image2;
+      }
+
+      var marker = new google.maps.Marker({
+        position: {lat: loc['latitude'], lng: loc['longitude']},
+        animation: anima,
+        map: map, title: loc['title'],
+        icon: icon
+      });
+      marker.addListener('click', toggleBounce);
+    });
+}
+
+  function toggleBounce() {
+    var marker_title = this.title;
+
+    if (this.getAnimation() !== null) {
+      this.setAnimation(null);
+      this.setIcon(null);
+    }
+
+    var this_location = locations.filter(function(d) { return d.title == marker_title });
+    var info_content = "<h3>" + this_location[0].title + "</h3><p>" + this_location[0].description + "</p>";
+    info_content += "<ul><li>Lat: "+this_location[0].latitude+"</li><li>Lon: "+this_location[0].longitude+"</li></ul>";
+    var infowindow = new google.maps.InfoWindow({
+      content: info_content
+    });
+    infowindow.open(map, this);
+  }
+</script>
+<script async defer
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKT9_DACKx2g8Kbxqe6C9Tpzy5PyrogWU&callback=initMap">
+</script>
+
+</body>

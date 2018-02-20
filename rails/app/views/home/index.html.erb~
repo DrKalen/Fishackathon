@@ -1,0 +1,37 @@
+<style type="text/css" media="screen">
+      body {
+        text-align:center;
+        margin: 0;
+        margin-bottom: 25px;
+        padding: 0;
+        background-color: #ffffff;
+        font-family: "Lucida Grande", "Bitstream Vera Sans", "Verdana";
+        font-size: 13px;
+        color: #333;
+      }
+
+    .vcenter {
+       position: relative;
+       top: 50%; 
+       transform: translateY(-50%);
+       -webkit-transform: translateY(-50%);
+    }
+
+     div {
+        font-family: "Lucida Grande", "Bitstream Vera Sans", "Verdana";
+     }
+
+      h1 {
+        font-size: 28px;
+        color: #000;
+      }
+
+</style>
+<div style="height: 100px; align: center">
+  <%= image_tag("StoPoaching.jpg", size: '50x45') %>
+  <div class="vcenter" style="font-size: 28px; color: #030303;">Poach Stopper</div>
+  <%= image_tag("StoPoaching.jpg", size: '50x45') %>
+</div>
+<hr>
+<p>This file is located in <%= Rails.root.to_s %>/app/views/home/index.html.erb</p>
+

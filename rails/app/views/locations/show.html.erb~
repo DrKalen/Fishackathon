@@ -1,0 +1,19 @@
+<p>
+  Title: <%= @location.title %>
+</p>
+<p>
+  Latitude: <%= @location.latitude %><br>
+  Longitude <%= @location.longitude %>
+</p>
+
+<p>
+  Description<br><%= @location.description %>
+</p>
+
+<p>
+  Status: <%= @location.status %>
+</p>
+
+<p>
+  ID: <%= @location.id %>
+</p>
